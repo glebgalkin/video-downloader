@@ -1,11 +1,14 @@
 import express from "express"
-import * as fs from "fs";
+import fs from "fs";
 
 const app = express()
+app.use(express.static('public'));
 const port = 3000
 
+
+
 app.get('/', (req, res) => {
-    res.send({name: "Gleb"})
+    res.sendFile('views/index.html', { root: 'public' })
 })
 
 app.get('/text', (req, res) => {
