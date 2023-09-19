@@ -1,5 +1,6 @@
 import express from "express"
 import fs from "fs";
+import ytdl from "ytdl-core"
 
 const app = express()
 app.use(express.static('public'));
@@ -37,6 +38,20 @@ app.get('/stream', (req, res) => {
     };
     res.writeHead(200, headers);
     fs.createReadStream(videoPath).pipe(res);
+})
+
+app.get('/youtube', (req, res) => {
+    const videoURL = 'https://youtu.be/YT5pOzn5nsY?si=E-KpQg8aAcx8bRAB'
+    ytdl(videoURL, {filter: 'audioonly'})
+        .pipe(fs.createWriteStream('video.mp3'))
+        .on('finish', () => {
+            console.log('Video downloaded successfully!');
+
+        })
+        .on('error', (err) => {
+            console.error('Error downloading video:', err);
+        });
+    res.send('Processed')
 })
 
 
